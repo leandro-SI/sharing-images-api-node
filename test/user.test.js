@@ -14,6 +14,7 @@ describe("Cadastro de usuário", () => {
             .send(user)
             .then((response) => {
                 expect(response.statusCode).toEqual(200)
+                expect(response.body.email).toEqual(email)
             }).catch(err => {
                 fail(err)
             });
