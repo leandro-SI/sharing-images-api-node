@@ -44,4 +44,9 @@ app.post('/user/create', async (request, response) => {
     }
 })
 
+app.delete('/user/delete/:email', async (request, response) => {
+    await User.deleteOne({email: request.params.email});
+    return response.status(200).json("Deletado com sucesso!!")
+});
+
 module.exports = app;
