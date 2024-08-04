@@ -21,6 +21,11 @@ app.get('/', (req, res) => {
 app.post('/user/create', async (request, response) => {
     try {
         const {name, email, password} = request.body;
+
+        if (name == "" || email == "" || password == "") {
+            return response.status(400).json("dados inválidos");
+        }
+
         let newUser = new User({name: name, email: email, password: password});
         await newUser.save();
 
