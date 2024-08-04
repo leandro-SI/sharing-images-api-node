@@ -42,7 +42,7 @@ describe("Cadastro de usuário", () => {
         return request.post("/user/create")
             .send(user)
             .then((response) => {
-                expect(response.statusCode).toEqual(400);
+                expect(response.statusCode).toEqual(200);
                 expect(response.body.email).toEqual(email);
 
                 return request.post("/user/create")

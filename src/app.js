@@ -26,9 +26,14 @@ app.post('/user/create', async (request, response) => {
             return response.status(400).json("dados inválidos");
         }
 
+        let userExist = await User.findOne({"email": email});
+
+        if (userExist != null) {
+            return response.status(400).json({error: "E-mail já cadastrado"});
+        }
+
         let newUser = new User({name: name, email: email, password: password});
         await newUser.save();
-
         response.status(200).json({email: email})
     } catch (error) {
         response.sendStatus(500);
