@@ -5,6 +5,8 @@ const bcrypt = require('bcrypt');
 let user = require('./models/User');
 let jwt = require('jsonwebtoken');
 
+const secret_key = "ndwpwkdmcowqrowei0830j23dojfo332";
+
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 
@@ -43,6 +45,18 @@ app.post('/user/create', async (request, response) => {
     } catch (error) {
         response.sendStatus(500);
     }
+})
+
+app.post('/auth', (request, response) => {
+    let { email, password } = request.body;
+    jwt.sign({email}, secret_key, {expiresIn: '2h'}, (err, token) => {
+        if (err) {
+            console.log(err)
+            return response.status(500);
+        } else {
+            return response.status(200).json({token: token})
+        }
+    })
 })
 
 app.delete('/user/delete/:email', async (request, response) => {
