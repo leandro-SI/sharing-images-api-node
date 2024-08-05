@@ -1,2 +1,2 @@
 # sharing-images-api-node
-Criação de API para compartilhamento de imagens, com autenticação JWT, TDD e MongoDB
+Realizando alguns testes com Jest em uma api node - autenticação JWT, TDD e MongoDB
