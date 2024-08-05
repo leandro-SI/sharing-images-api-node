@@ -78,4 +78,28 @@ describe("Autenticação", () => {
                 fail(err);
             })
     })
+
+    test('Deve impedir que um usuário não cadastrado realize login', () => {
+
+        return request.post("/auth")
+        .send({email: "dayanne@gmail.com", password: mainUser.password})
+        .then(res => {
+            expect(res.statusCode).toEqual(403);
+            expect(res.body.errors.email).toEqual("E-mail não cadastrado");
+        }).catch(err => {
+            fail(err);
+        }) 
+    })
+
+    test('Deve impedir que um usuário realize login com a senha incorreta', () => {
+
+        return request.post("/auth")
+        .send({email: mainUser.email, password: "8845023"})
+        .then(res => {
+            expect(res.statusCode).toEqual(403);
+            expect(res.body.errors.password).toEqual("Senha incorreta");
+        }).catch(err => {
+            fail(err);
+        }) 
+    })
 })

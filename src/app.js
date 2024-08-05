@@ -47,16 +47,41 @@ app.post('/user/create', async (request, response) => {
     }
 })
 
-app.post('/auth', (request, response) => {
-    let { email, password } = request.body;
-    jwt.sign({email}, secret_key, {expiresIn: '2h'}, (err, token) => {
-        if (err) {
-            console.log(err)
-            return response.status(500);
-        } else {
-            return response.status(200).json({token: token})
+app.post('/auth', async (request, response) => {
+    try {
+        let { email, password } = request.body;
+
+        let user = await User.findOne({email: email});
+
+        if (user == undefined) {
+            return response.status(403).json({
+                errors: {
+                    email: "E-mail não cadastrado"
+                }
+            })
         }
-    })
+
+        let isPasswordValid = await bcrypt.compare(password, user.password);
+
+        if (!isPasswordValid) {
+            return response.status(403).json({
+                errors: {
+                    password: "Senha incorreta"
+                }
+            })
+        }
+    
+        jwt.sign({email: email, name: user.name, id: user._id}, secret_key, {expiresIn: '2h'}, (err, token) => {
+            if (err) {
+                console.log(err)
+                return response.status(500);
+            } else {
+                return response.status(200).json({token: token})
+            }
+        })
+    } catch (error) {
+        console.log(error);
+    }
 })
 
 app.delete('/user/delete/:email', async (request, response) => {
